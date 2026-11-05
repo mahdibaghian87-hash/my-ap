@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Glass Player</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap">
+<style>
+:root{color-scheme:dark;--bg:#000;--fg:#fff;--mut:rgba(255,255,255,.72);--g:rgba(255,255,255,.13);--gb:rgba(255,255,255,.24);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Vazirmatn,system-ui,sans-serif;overflow:hidden}
+button,input{font-family:inherit;color:inherit}
+#app{position:relative;height:100%;max-width:480px;margin:0 auto;overflow:hidden}
+.bg{position:fixed;inset:0;overflow:hidden;background:var(--bg)}
+.bl{position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:0;transition:background 1s,opacity 1s;animation:fl 18s ease-in-out infinite alternate}
+#b2{animation-duration:23s;animation-direction:alternate-reverse}
+.glass{background:var(--g);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:1px solid var(--gb);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 24px rgba(0,0,0,.25)}
+.scr{position:absolute;inset:0;padding:22px 20px 180px;overflow-y:auto;display:none}
+.scr.on{display:block}
+#now.on{display:flex;flex-direction:column;justify-content:space-between;padding-bottom:30px;gap:14px}
+h1{margin:0 0 14px;font-size:28px}h2{margin:18px 0 6px;font-size:16px}
+.sub{font-size:12px;color:var(--mut)}
+.b{border:0;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;min-width:44px;min-height:44px}
+.pill{border-radius:24px;padding:0 16px;height:44px;font-size:13px}
+.row{display:flex;align-items:center;gap:12px;width:100%;height:62px;text-align:right;border:0;background:none;cursor:pointer}
+.cv{width:50px;height:50px;border-radius:14px;flex:none}
+.rt{flex:1;min-width:0}.rt b{display:block;font-size:14px;font-weight:600}
+.card{display:flex;align-items:center;gap:12px;min-height:64px;border-radius:20px;padding:8px 14px;margin-bottom:10px}
+.mini{position:absolute;left:14px;right:14px;bottom:92px;height:64px;border-radius:32px;display:flex;align-items:center;gap:12px;padding:0 10px}
+.tabs{position:absolute;left:14px;right:14px;bottom:14px;height:64px;border-radius:32px;display:flex;align-items:center;padding:0 6px;gap:2px}
+.tabs .b{flex:1;height:52px;border-radius:26px;font-size:12px;color:var(--mut);flex-direction:column;gap:1px}
+.tabs .b.on{background:rgba(255,255,255,.2);color:#fff}
+.ln{font-size:26px;font-weight:700;line-height:1.5;margin:0 0 20px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .3s}
+.ln.a{color:#fff;font-size:31px}
+input[type=range]{width:100%;margin:0;accent-color:#fff}
+.hid{display:none}
+#toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%);padding:10px 16px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+.ib{width:52px;height:52px;border-radius:50%;padding:0}
+.hasimg svg{opacity:0}
+.pill.on{background:rgba(255,255,255,.32)}
+.b{transition:transform .2s,background .3s}
+.b:active,.row:active{transform:scale(.92)}
+.tabs .b svg{transition:transform .3s}.tabs .b.on svg{transform:translateY(-2px) scale(1.12)}
+.scr.on{animation:up .45s cubic-bezier(.2,.8,.2,1)}
+.row,.card,.ln{animation:up .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0)*70ms)}
+.mini,.tabs{animation:up .6s cubic-bezier(.2,.8,.2,1) both}
+#cover{transition:transform .6s}
+body.pl #cover{animation:br 3.2s ease-in-out infinite}
+body.pl #cover svg{animation:sp 24s linear infinite}
+body.pl #now .pp{animation:pu 1.8s ease-out infinite}
+@keyframes fl{to{transform:translate(50px,70px) scale(1.15)}}
+@keyframes up{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes br{50%{transform:scale(1.04)}}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes pu{0%{box-shadow:0 0 0 0 rgba(255,255,255,.35)}100%{box-shadow:0 0 0 24px rgba(255,255,255,0)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg"><div class="bl" id="b1" style="left:-90px;top:-60px"></div><div class="bl" id="b2" style="right:-110px;top:35%"></div><div class="bl" id="b3" style="left:10px;bottom:-100px"></div></div>
+<div id="app">
+<section class="scr on" id="home">
+<h1>خانه</h1>
+<label class="glass b pill" style="display:inline-flex;gap:8px" for="f1">+ افزودن آهنگ از گوشی</label>
+<input class="hid" id="f1" type="file" accept="audio/*" multiple>
+<h2>آهنگ‌های من</h2>
+<div id="list"></div>
+<h2>پس‌زمینه</h2>
+<div id="bgs" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+</section>
+<section class="scr" id="now">
+<div style="display:flex;justify-content:space-between;align-items:center"><button class="b glass ib" aria-label="بازگشت" onclick="go('home')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><span style="font-size:14px;font-weight:600">در حال پخش</span><span style="width:44px"></span></div>
+<div class="glass" id="cover" style="width:min(310px,78vw);aspect-ratio:1;border-radius:34px;align-self:center;overflow:hidden"><svg viewBox="0 0 310 310" width="100%" height="100%" aria-hidden="true"><circle cx="155" cy="155" r="120" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/><circle cx="155" cy="155" r="80" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2"/><circle cx="155" cy="155" r="40" fill="#fff" fill-opacity=".25"/></svg></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><div id="nt" style="font-size:22px;font-weight:700"></div><div class="sub" id="na" style="font-size:14px"></div></div><label class="glass b pill" for="f3" style="height:40px">تغییر کاور</label><input class="hid" id="f3" type="file" accept="image/*"></div>
+<div dir="ltr"><input type="range" id="sk" min="0" max="100" step="0.1" value="0" aria-label="موقعیت پخش"><div style="display:flex;justify-content:space-between" class="sub"><span id="tp">۰:۰۰</span><span id="td">۰:۰۰</span></div></div>
+<div dir="ltr" style="display:flex;align-items:center;justify-content:space-around"><button class="b glass ib" aria-label="قبلی" onclick="step(-1)"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M19 5v14L8 12z"/><path d="M5 5v14"/></svg></button><button class="b glass pp" aria-label="پخش" style="width:76px;height:76px;border-radius:38px" onclick="toggle()"></button><button class="b glass ib" aria-label="بعدی" onclick="step(1)"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 5v14l11-7z"/><path d="M19 5v14"/></svg></button></div>
+<div class="glass" style="height:56px;border-radius:28px;display:flex;justify-content:space-around;align-items:center"><button class="b" style="font-size:14px" onclick="go('lyrics')">متن آهنگ</button><button class="b" style="font-size:14px" onclick="go('sources')">منابع پخش</button></div>
+</section>
+<section class="scr" id="lyrics">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span class="glass sub" style="padding:4px 12px;border-radius:14px;color:#fff">متن همگام‌شده</span><label class="glass b pill" for="f2" style="height:40px">بارگذاری فایل متن (.lrc)</label><input class="hid" id="f2" type="file" accept=".lrc,.txt"></div>
+<div id="ly" style="padding-top:24px"></div>
+</section>
+<section class="scr" id="sources">
+<h1>منابع پخش</h1>
+<div class="card glass"><i style="width:12px;height:12px;border-radius:6px;background:#4DD98B"></i><div class="rt"><b>Spotify</b><span class="sub">نیازمند اتصال به API</span></div><button class="b glass pill" onclick="toast('برای اتصال به Spotify باید کلید API رسمی اضافه شود.')">اتصال</button></div>
+<div class="card glass"><i style="width:12px;height:12px;border-radius:6px;background:#FF4D4D"></i><div class="rt"><b>YouTube Music</b><span class="sub">نیازمند اتصال به API</span></div><button class="b glass pill" onclick="toast('برای اتصال به YouTube Music باید API رسمی اضافه شود.')">اتصال</button></div>
+<div class="card glass"><i style="width:12px;height:12px;border-radius:6px;background:#FF9A3D"></i><div class="rt"><b>SoundCloud</b><span class="sub">نیازمند اتصال به API</span></div><button class="b glass pill" onclick="toast('برای اتصال به SoundCloud باید کلید API اضافه شود.')">اتصال</button></div>
+<div class="card glass"><div class="rt"><b>تشخیص خودکار متن آهنگ</b><span class="sub">نیازمند سرویس متن آهنگ</span></div><input type="checkbox" checked aria-label="تشخیص خودکار متن" style="width:44px;height:28px;accent-color:#4DD98B"></div>
+</section>
+<div class="mini glass" id="mini"><div class="cv" id="mc" style="width:44px;height:44px;border-radius:22px"></div><button class="rt b" style="justify-content:flex-start;text-align:right;flex-direction:column;align-items:flex-start" onclick="go('now')" aria-label="باز کردن پلیر"><b id="mt" style="font-size:14px"></b><span class="sub" id="ma"></span></button><button class="b glass pp" aria-label="پخش" style="width:44px;height:44px;border-radius:22px" onclick="toggle()"></button></div>
+<nav class="tabs glass"><button class="b on" data-g="home" onclick="go('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>خانه</button><button class="b" data-g="sources" onclick="go('sources')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M7.5 7.5a6 6 0 0 0 0 9M16.5 7.5a6 6 0 0 1 0 9M4.5 4.5a10 10 0 0 0 0 15M19.5 4.5a10 10 0 0 1 0 15"/></svg>منابع</button><button class="b" data-g="lyrics" onclick="go('lyrics')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>متن</button></nav>
+</div>
+<div id="toast" class="glass"></div>
+<script>
+const $=s=>document.querySelector(s),fa=s=>String(s).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const fmt=s=>{s=Math.floor(s||0);return fa(Math.floor(s/60)+':'+String(s%60).padStart(2,'0'))};
+const PAL=[['#FF6B4A','#8E4DFF','#FFC857'],['#4DB6AC','#3D5AFE','#F06292'],['#F9A826','#E91E63','#26C6DA'],['#7E57C2','#26A69A','#FF7043']];
+const L1='[00:00.00]متن آهنگ، خط ۱\n[00:08.00]متن آهنگ، خط ۲\n[00:16.00]متن آهنگ، خط ۳\n[00:24.00]متن آهنگ، خط ۴\n[00:32.00]متن آهنگ، خط ۵\n[00:40.00]متن آهنگ، خط ۶';
+let T=[{t:'نام آهنگ ۱',a:'نام خواننده',c:PAL[0],d:230,lrc:L1},{t:'نام آهنگ ۲',a:'نام خواننده',c:PAL[1],d:200,lrc:L1}],i=0,playing=false,pos=0,drag=false,scr='home',lastA=-1;
+const au=new Audio(),cur=()=>T[i];
+const BG={black:null,song:'song',blue:['#2979FF','#00B0FF','#536DFE'],purple:['#7C4DFF','#E040FB','#651FFF'],green:['#00C853','#1DE9B6','#64DD17']},BN={black:'سیاه',song:'رنگی از آهنگ',blue:'آبی',purple:'بنفش',green:'سبز'};
+let bm='black';try{bm=localStorage.getItem('bm')||'black'}catch(e){}
+function bgApply(){const v=BG[bm],cs=v==='song'?cur().c:v;['b1','b2','b3'].forEach((id,k)=>{const e=$('#'+id);e.style.opacity=cs?0.7:0;if(cs)e.style.background=cs[k]})}
+function bgChips(){$('#bgs').innerHTML=Object.keys(BN).map(k=>`<button class="b glass pill${k===bm?' on':''}" onclick="setBg('${k}')">${BN[k]}</button>`).join('')}
+function setBg(m){bm=m;try{localStorage.setItem('bm',m)}catch(e){}bgApply();bgChips()}
+function icons(){document.body.classList.toggle('pl',playing);document.querySelectorAll('.pp').forEach(b=>{b.innerHTML=playing?PA:PL;b.setAttribute('aria-label',playing?'توقف':'پخش')})}
+const PL='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',PA='<svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4h4v16H7zM13 4h4v16h-4z"/></svg>';
+function parse(s){return (s||'').split('\n').map(l=>{const m=l.match(/^\[(\d+):(\d+(?:\.\d+)?)\](.*)$/);return m&&{t:+m[1]*60+ +m[2],x:m[3].trim()}}).filter(Boolean).sort((a,b)=>a.t-b.t)}
+function paint(){
+ const t=cur();bgApply();bgChips();
+ const bi=t.img?`url(${t.img}) center/cover`:t.c[0];$('#cover').style.background=bi;$('#mc').style.background=bi;$('#cover').classList.toggle('hasimg',!!t.img);
+ $('#nt').textContent=$('#mt').textContent=t.t;$('#na').textContent=$('#ma').textContent=t.a;
+ icons();
+ $('#list').innerHTML=T.map((x,k)=>`<button class="row" style="--d:${k}" onclick="play(${k})"><div class="cv" style="background:${x.img?`url(${x.img}) center/cover`:x.c[0]}"></div><div class="rt"><b>${x.t.replace(/</g,'&lt;')}</b><span class="sub">${x.a}</span></div></button>`).join('');
+ const L=t.L=parse(t.lrc);lastA=-1;
+ $('#ly').innerHTML=L.length?L.map((l,k)=>`<p class="ln" style="--d:${k}" data-k="${k}" data-t="${l.t}">${l.x.replace(/</g,'&lt;')}</p>`).join(''):'<p class="sub" style="font-size:16px">متنی برای این آهنگ نیست. فایل .lrc بارگذاری کن.</p>';
+ $('#sk').max=t.d||100;
+}
+function load(n){i=n;pos=0;au.pause();const t=cur();if(t.u){au.src=t.u;if(playing)au.play()}paint()}
+function play(n){playing=true;load(n);if(!cur().u)paint();go('now')}
+function step(d){load((i+d+T.length)%T.length)}
+function toggle(){playing=!playing;if(cur().u)playing?au.play():au.pause();icons()}
+function go(n){scr=n;document.querySelectorAll('.scr').forEach(e=>e.classList.toggle('on',e.id===n));document.querySelectorAll('.tabs .b').forEach(b=>b.classList.toggle('on',b.dataset.g===n));$('#mini').style.display=n==='now'?'none':'flex';$('.tabs').style.display=n==='now'?'none':'flex'}
+function toast(m){const e=$('#toast');e.textContent=m;e.style.opacity=1;clearTimeout(e._t);e._t=setTimeout(()=>e.style.opacity=0,2600)}
+au.onended=()=>step(1);au.onloadedmetadata=()=>{cur().d=au.duration;$('#sk').max=au.duration};
+$('#sk').oninput=e=>{drag=true;pos=+e.target.value};
+$('#sk').onchange=e=>{drag=false;pos=+e.target.value;if(cur().u)au.currentTime=pos};
+$('#ly').onclick=e=>{const p=e.target.closest('.ln');if(p){pos=+p.dataset.t;if(cur().u)au.currentTime=pos}};
+$('#f1').onchange=async e=>{for(const f of e.target.files){const o={t:f.name.replace(/\.[^.]+$/,''),a:'از گوشی',c:PAL[T.length%PAL.length],d:0,u:URL.createObjectURL(f),lrc:''};o.img=await art(f);T.push(o)}paint();toast('آهنگ اضافه شد')};
+$('#f2').onchange=async e=>{const f=e.target.files[0];if(f){cur().lrc=await f.text();paint();toast('متن آهنگ بارگذاری شد')}};
+setInterval(()=>{const t=cur();if(playing&&!t.u){pos+=.25;if(pos>=t.d)step(1)}else if(t.u&&!drag)pos=au.currentTime;
+ if(!drag)$('#sk').value=pos;$('#tp').textContent=fmt(pos);$('#td').textContent=fmt(t.d);
+ const L=t.L||[];let a=0;L.forEach((l,k)=>{if(pos>=l.t)a=k});
+ if(a!==lastA){lastA=a;document.querySelectorAll('.ln').forEach((p,k)=>p.classList.toggle('a',k===a));if(scr==='lyrics'){const p=document.querySelector('.ln.a');p&&p.scrollIntoView({block:'center',behavior:'smooth'})}}},250);
+async function art(f){try{const b=new Uint8Array(await f.slice(0,6e6).arrayBuffer());if(b[0]!==73||b[1]!==68||b[2]!==51)return;const v=b[3],end=Math.min(10+((b[6]<<21)|(b[7]<<14)|(b[8]<<7)|b[9]),b.length);let p=10;
+while(p+10<end){const id=String.fromCharCode(b[p],b[p+1],b[p+2],b[p+3]),s=v===4?(b[p+4]<<21)|(b[p+5]<<14)|(b[p+6]<<7)|b[p+7]:(b[p+4]<<24)|(b[p+5]<<16)|(b[p+6]<<8)|b[p+7];if(!(s>0))break;
+if(id==='APIC'){let q=p+10;const enc=b[q++];let m='';while(b[q])m+=String.fromCharCode(b[q++]);q+=2;if(enc===1||enc===2){while(!(b[q]===0&&b[q+1]===0))q+=2;q+=2}else{while(b[q])q++;q++}return URL.createObjectURL(new Blob([b.slice(q,p+10+s)],{type:m.includes('/')?m:'image/jpeg'}))}
+p+=10+s}}catch(e){}}
+$('#f3').onchange=e=>{const f=e.target.files[0];if(f){cur().img=URL.createObjectURL(f);paint();toast('کاور تغییر کرد')}};
+paint();go('home');
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
